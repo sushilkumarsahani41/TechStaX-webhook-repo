@@ -4,14 +4,16 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# Set up MongoDB client and database
+muri = 'mongodb+srv://devsahanisushilkumar:YF4Gpgtg0CBoikFX@cluster0.71cay.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+client = MongoClient(muri)
+db = client['github_webhooks']
+collection = db['events']
 
 @app.route('/')
 def index():
     return render_template('index.html')
-# Set up MongoDB client and database
-client = MongoClient('mongodb+srv://devsahanisushilkumar:YF4Gpgtg0CBoikFX@cluster0.71cay.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-db = client['github_webhooks']
-collection = db['events']
+
 
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
