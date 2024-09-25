@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Set up MongoDB client and database
-muri = os.getenv('MONGO_URI', 'your-default-mongo-uri-here')  # Use environment variables for credentials
+muri =  'mongodb+srv://devsahanisushilkumar:YF4Gpgtg0CBoikFX@cluster0.71cay.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 client = MongoClient(muri)
 db = client['github_webhooks']
 collection = db['events']
