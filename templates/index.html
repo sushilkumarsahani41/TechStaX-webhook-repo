@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Webhook Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .card {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .bold-italic {
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub Webhook Events</h1>
+    <div id="content" class="card-container"></div>
+
+    <script>
+        function fetchData() {
+            fetch('https://dd5v385tf5.execute-api.ap-south-1.amazonaws.com/production/get_events')
+                .then(response => response.json())
+                .then(data => {
+                    const content = document.getElementById('content');
+                    content.innerHTML = '';
+                    data.forEach(event => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+
+                        // Format the date as "6 Jul, 2024"
+                        const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
+                        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                        const formattedDate = new Date(event.timestamp).toLocaleDateString('en-US', dateOptions);
+                        const formattedTime = new Date(event.timestamp).toLocaleTimeString('en-US', timeOptions);
+
+                        const p = document.createElement('p');
+                        p.innerHTML = `<span class="bold">${event.author}</span> performed
+                                      <span class="bold-italic">${event.type}</span> on
+                                      <span class="bold">${formattedDate} at ${formattedTime}</span>`;
+                        card.appendChild(p);
+                        content.appendChild(card);
+                    });
+                });
+        }
+
+        setInterval(fetchData, 15000); // refres every 15 seconds
+        fetchData(); // first load
+    </script>
+</body>
+</html>
