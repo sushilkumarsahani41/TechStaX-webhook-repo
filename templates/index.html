@@ -64,7 +64,7 @@
 
     <script>
         function fetchData() {
-            fetch('https://dd5v385tf5.execute-api.ap-south-1.amazonaws.com/production/get_events')
+            fetch('/get_events')
                 .then(response => response.json())
                 .then(data => {
                     const content = document.getElementById('content');
