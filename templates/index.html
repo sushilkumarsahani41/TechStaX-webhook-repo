@@ -73,15 +73,22 @@
                         const card = document.createElement('div');
                         card.className = 'card';
 
-                        // Format the date as "6 Jul, 2024"
                         const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
                         const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
                         const formattedDate = new Date(event.timestamp).toLocaleDateString('en-US', dateOptions);
                         const formattedTime = new Date(event.timestamp).toLocaleTimeString('en-US', timeOptions);
 
                         const p = document.createElement('p');
+                        let branchInfo = '';
+
+                        if (event.type === 'push') {
+                            branchInfo = ` to branch <span class="bold">${event.to_branch}</span>`;
+                        } else if (event.type === 'pull_request' || event.type === 'merge') {
+                            branchInfo = ` from branch <span class="bold">${event.from_branch}</span> to branch <span class="bold">${event.to_branch}</span>`;
+                        }
+
                         p.innerHTML = `<span class="bold">${event.author}</span> performed
-                                      <span class="bold-italic">${event.type}</span> on
+                                      <span class="bold-italic">${event.type}</span>${branchInfo} on
                                       <span class="bold">${formattedDate} at ${formattedTime}</span>`;
                         card.appendChild(p);
                         content.appendChild(card);
@@ -89,8 +96,8 @@
                 });
         }
 
-        setInterval(fetchData, 15000); // refres every 15 seconds
-        fetchData(); // first load
+        setInterval(fetchData, 15000); // refresh every 15 seconds
+        fetchData(); // initial load
     </script>
 </body>
 </html>
